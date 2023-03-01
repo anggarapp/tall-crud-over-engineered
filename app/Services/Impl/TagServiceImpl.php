@@ -4,6 +4,7 @@ namespace App\Services\Impl;
 
 use App\Repositories\TagRepository;
 use App\Services\TagService;
+use Illuminate\Support\Facades\DB;
 
 class TagServiceImpl implements TagService
 {
@@ -13,19 +14,43 @@ class TagServiceImpl implements TagService
     {
         $this->tagRepository = $tagRepository;
     }
+
     public function getAllTags()
     {
+        return $this->tagRepository->getAllTags();
     }
     public function getTagById($tagId)
     {
+        return $this->tagRepository->getTagById($tagId);
     }
     public function deleteTag($tagId)
     {
+        DB::beginTransaction();
+        try {
+            $this->tagRepository->deleteTag($tagId);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
     }
     public function updateTag($tagId, array $newDetails)
     {
+        DB::beginTransaction();
+        try {
+            $this->tagRepository->updateTag($tagId, $newDetails);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
     }
     public function createTag(array $newDetails)
     {
+        DB::beginTransaction();
+        try {
+            $this->tagRepository->createTag($newDetails);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
     }
 }
