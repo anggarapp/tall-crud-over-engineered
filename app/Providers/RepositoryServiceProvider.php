@@ -2,8 +2,18 @@
 
 namespace App\Providers;
 
+use App\Repositories\ImageRepository;
+use App\Repositories\Impl\ImageRepositoryImpl;
+use App\Repositories\Impl\PostRepositoryImpl;
+use App\Repositories\Impl\TagRepositoryImpl;
+use App\Repositories\PostRepository;
+use App\Repositories\TagRepository;
 use App\Services\ImageService;
 use App\Services\Impl\ImageServiceImpl;
+use App\Services\Impl\PostServiceImpl;
+use App\Services\Impl\TagServiceImpl;
+use App\Services\PostService;
+use App\Services\TagService;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
