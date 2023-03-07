@@ -27,4 +27,15 @@ class PostRepositoryImpl implements PostRepository
     {
         Post::create($newDetails);
     }
+    public function findPostWithSort($sortColumn, $sortDirection = 'asc', $searchTerm = null)
+    {
+        return Post::select('id', 'title', 'content', 'created_at')
+            ->where(function ($query) use ($searchTerm) {
+                if ($searchTerm) {
+                    $query->where('title', 'like', '%' . $searchTerm . '%');
+                    $query->orWhere('content', 'like', '%' . $searchTerm . '%');
+                }
+            })
+            ->orderBy($sortColumn, $sortDirection);
+    }
 }

@@ -10,7 +10,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\CreatesApplication;
 use Tests\TestCase;
 
+use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
+use function PHPUnit\Framework\assertNotNull;
 
 class PostTest extends TestCase
 {
@@ -129,5 +131,15 @@ class PostTest extends TestCase
             'title' => 'Post Create',
             'content' => 'Post Delete Test Case'
         ]);
+    }
+
+    public function testFindWithSortation()
+    {
+        $posts = $this->postService->findPostWithSort('id', 'asc')->first();
+        assertNotNull($posts);
+        assertEquals('1', $posts->id);
+        $posts = $this->postService->findPostWithSort('id', 'desc')->first();
+        assertNotNull($posts);
+        assertEquals('10', $posts->id);
     }
 }

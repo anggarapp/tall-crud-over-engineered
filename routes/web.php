@@ -22,19 +22,19 @@ Route::get('/', function () {
 
 Route::get('test', [PostController::class, 'test']);
 
-Route::prefix('posts')->name('posts')->group(
+Route::prefix('posts')->name('posts.')->group(
     function () {
         Route::get('/', [PostController::class, 'index'])->name('index');
     }
 );
 
-Route::prefix('images')->name('images')->group(
+Route::prefix('images')->name('images.')->group(
     function () {
         Route::get('/', [ImageController::class, 'index'])->name('index');
     }
 );
 
-Route::prefix('tags')->name('tags')->group(
+Route::prefix('tags')->name('tags.')->group(
     function () {
         Route::get('/', [TagController::class, 'index'])->name('index');
     }

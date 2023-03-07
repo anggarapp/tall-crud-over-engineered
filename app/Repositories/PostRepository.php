@@ -9,4 +9,5 @@ interface PostRepository
     public function deletePost($postId);
     public function updatePost($postId, array $newDetails);
     public function createPost(array $newDetails);
+    public function findPostWithSort($sortColumn, $sortDirection, $searchTerm = null);
 }
