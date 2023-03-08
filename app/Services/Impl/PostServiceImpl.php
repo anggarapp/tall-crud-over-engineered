@@ -56,7 +56,6 @@ class PostServiceImpl implements PostService
 
     public function findPostWithSort($sortColumn, $sortDirection = 'asc', $searchTerm = null)
     {
-        // dd($sortDirection);
         return $this->postRepository->findPostWithSort($sortColumn, $sortDirection, $searchTerm);
     }
 }

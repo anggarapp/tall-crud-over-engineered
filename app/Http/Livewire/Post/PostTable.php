@@ -49,7 +49,12 @@ class PostTable extends Component
         return [
             'id' => 'Id',
             'title' => 'Title',
-            'content' => 'Content',
+            'content' => [
+                'label' => 'content',
+                'parse' => function ($value) {
+                    return substr($value, 0, 30) . ' ...';
+                }
+            ],
             'created_at' => [
                 'label' => 'Created',
                 'parse' => function ($value) {
