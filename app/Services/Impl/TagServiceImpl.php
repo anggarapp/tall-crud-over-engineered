@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Models\Tag;
 use App\Repositories\TagRepository;
 use App\Services\TagService;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,10 @@ class TagServiceImpl implements TagService
     public function getTagById($tagId)
     {
         return $this->tagRepository->getTagById($tagId);
+    }
+    public function getTagByName($tagName)
+    {
+        return $this->tagRepository->getTagByName($tagName);
     }
     public function deleteTag($tagId)
     {
@@ -47,8 +52,9 @@ class TagServiceImpl implements TagService
     {
         DB::beginTransaction();
         try {
-            $this->tagRepository->createTag($newDetails);
+            $tag = $this->tagRepository->createTag($newDetails);
             DB::commit();
+            return $tag;
         } catch (\Exception $e) {
             DB::rollBack();
         }

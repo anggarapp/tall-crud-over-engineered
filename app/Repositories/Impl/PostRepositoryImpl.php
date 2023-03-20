@@ -21,11 +21,11 @@ class PostRepositoryImpl implements PostRepository
     }
     public function updatePost($postId, array $newDetails)
     {
-        Post::find($postId)->update($newDetails);
+        return tap(Post::find($postId))->update($newDetails);
     }
     public function createPost(array $newDetails)
     {
-        Post::create($newDetails);
+        return Post::create($newDetails);
     }
     public function findPostWithSort($sortColumn, $sortDirection = 'asc', $searchTerm = null)
     {

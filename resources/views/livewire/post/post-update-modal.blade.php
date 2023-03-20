@@ -2,7 +2,7 @@
   <x-modal wire:model="show" @mousedown.outside="$wire.clearVariable()" x-cloak>
     <div class="flex items-center justify-between space-x-4 pb-2">
       {{-- Selected: {{ $modelId }} --}}
-      <h1 class="text-xl font-medium text-gray-800 ">Create New Post</h1>
+      <h1 class="text-xl font-medium text-gray-800 ">Update Post</h1>
 
       <button @click="$wire.unshow()" class="text-gray-600 focus:outline-none hover:text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -13,7 +13,7 @@
     </div>
     <label for="title">Title</label>
     <input type="text" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4
-focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wire:model="title">
+    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wire:model="title">
     @if ($errors->has('title'))
     <div class="bg-red-100 rounded-sm py-2 px-2 mb-1 text-base text-red-700 inline-flex items-center w-full"
       role="alert">
@@ -28,7 +28,7 @@ focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wir
     @endif
     <label for="content">Content</label>
     <input type="text" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4
-focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wire:model="content">
+    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wire:model="content">
     @if ($errors->has('content'))
     <div class="bg-red-100 rounded-sm py-2 px-2 mb-1 text-base text-red-700 inline-flex items-center w-full"
       role="alert">
@@ -41,13 +41,13 @@ focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wir
       {{ $errors->first('content') }}
     </div>
     @endif
-    <label for="tag">Tag - {{ implode(', ',$tags) }}</label>
+    <label for="tag">Tag</label>
     <div x-data @tags-update="console.log('tags updated', $event.detail.tags)" data-tags='[]'>
-      <div x-data="tagSelectCreate()" x-init="init('parentEl')" @click.away="clearSearch()"
+      <div x-data="tagSelectUpdate()" x-init="init('parentEl')" @click.away="clearSearch()"
         @keydown.escape="clearSearch()">
         <div class="relative" @keydown.enter.prevent="addTag(textInput)">
           <input x-model="textInput" x-ref="textInput" @input="search($event.target.value)" class="form-control block w-full px-3 py-1 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-2
-                        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Enter some tags">
           <div :class="[open ? 'block' : 'hidden']">
             <div class="absolute z-40 left-0 w-full">
@@ -77,14 +77,14 @@ focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wir
 
 
 
-    <button wire:click="store" data-mdb-ripple="true" data-mdb-ripple-color="light"
+    <button wire:click="storeUpdate" data-mdb-ripple="true" data-mdb-ripple-color="light"
       class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
       Submit
     </button>
   </x-modal>
 
   <script>
-    function tagSelectCreate() {
+    function tagSelectUpdate() {
       return {
         open: false,
         textInput: '',

@@ -3,13 +3,12 @@
 namespace App\Http\Livewire\Post;
 
 use App\Http\Livewire\ModalBase;
-use App\Models\Tag;
 use App\Services\PostService;
 use Illuminate\Support\Facades\App;
-use Livewire\Component;
 
-class PostCreateModal extends ModalBase
+class PostUpdateModal extends ModalBase
 {
+    public $selectedPostId;
     public $title;
     public $content;
     public $tags = [];
@@ -18,15 +17,24 @@ class PostCreateModal extends ModalBase
         'content' => 'required',
     ];
 
+
+    public function getListeners()
+    {
+        return $this->listeners + [
+            'showUpdate' => 'showUpdate'
+        ];
+    }
+
     public function render()
     {
-        return view('livewire.post.post-create-modal');
+        return view('livewire.post.post-update-modal');
     }
 
     public function clearVariable()
     {
         $this->title = null;
         $this->content = null;
+        $this->selectedPostId = null;
         $this->tags = [];
         $this->resetValidation();
         $this->resetErrorBag();
@@ -39,17 +47,27 @@ class PostCreateModal extends ModalBase
         $this->emit('refreshPostParent');
     }
 
-    public function store()
+    public function showUpdate($selectedPostId)
+    {
+        $this->selectedPostId = $selectedPostId;
+        $postService = App::make(PostService::class);
+        $selectedPost = $postService->getPostById($this->selectedPostId);
+        $this->title = $selectedPost->title;
+        $this->content = $selectedPost->content;
+        $this->tags = $selectedPost->tags->pluck('name')->toArray();
+        $this->show();
+    }
+
+    public function storeUpdate()
     {
         $this->validate();
-
         $postService = App::make(PostService::class);
-        $created_post = $postService->createPost([
+        $updatedPost = $postService->updatePost($this->selectedPostId, [
             'title' => $this->title,
             'content' => $this->content,
             'tags' => $this->tags,
         ]);
-        if ($created_post) {
+        if ($updatedPost) {
             $this->unshow();
         } else {
             // dd('error');

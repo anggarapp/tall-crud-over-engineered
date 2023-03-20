@@ -10,4 +10,13 @@ class Tag extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function posts()
+    {
+        return $this->morphedByMany(Post::class, 'taggable');
+    }
+    public function images()
+    {
+        return $this->morphedByMany(Image::class, 'taggable');
+    }
 }

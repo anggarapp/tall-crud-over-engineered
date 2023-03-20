@@ -6,12 +6,10 @@ use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\CreatesApplication;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertNotNull;
 
 class PostTest extends TestCase
@@ -53,7 +51,8 @@ class PostTest extends TestCase
 
         $this->postService->createPost([
             'title' => 'Post By Id',
-            'content' => 'Post By Id Test Case'
+            'content' => 'Post By Id Test Case',
+            'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -72,7 +71,8 @@ class PostTest extends TestCase
     {
         $this->postService->createPost([
             'title' => 'Post Create',
-            'content' => 'Post Create Test Case'
+            'content' => 'Post Create Test Case',
+            'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -85,7 +85,8 @@ class PostTest extends TestCase
     {
         $this->postService->createPost([
             'title' => 'Post Create',
-            'content' => 'Post Update Test Case'
+            'content' => 'Post Update Test Case',
+            'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -97,7 +98,8 @@ class PostTest extends TestCase
 
         $this->postService->updatePost($postId, [
             'title' => 'Post Update',
-            'content' => 'Post Updated Test Case'
+            'content' => 'Post Updated Test Case',
+            'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -115,7 +117,8 @@ class PostTest extends TestCase
     {
         $this->postService->createPost([
             'title' => 'Post Create',
-            'content' => 'Post Delete Test Case'
+            'content' => 'Post Delete Test Case',
+            'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [

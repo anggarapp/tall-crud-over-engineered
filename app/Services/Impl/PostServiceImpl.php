@@ -2,17 +2,25 @@
 
 namespace App\Services\Impl;
 
+use App\Models\Tag;
 use App\Repositories\PostRepository;
+use App\Services\ImageService;
 use App\Services\PostService;
+use App\Services\TagService;
+use Error;
 use Illuminate\Support\Facades\DB;
 
 class PostServiceImpl implements PostService
 {
     private PostRepository $postRepository;
+    private TagService $tagService;
+    private ImageService $imageService;
 
-    public function __construct(PostRepository $postRepository)
+    public function __construct(PostRepository $postRepository, TagService $tagService, ImageService $imageService)
     {
         $this->postRepository = $postRepository;
+        $this->tagService = $tagService;
+        $this->imageService = $imageService;
     }
 
     public function getAllPosts()
@@ -37,20 +45,60 @@ class PostServiceImpl implements PostService
     {
         DB::beginTransaction();
         try {
-            $this->postRepository->updatePost($postId, $newDetails);
+            $updatedPost = $this->postRepository->updatePost($postId, [
+                'title' => $newDetails['title'],
+                'content' => $newDetails['content']
+            ]);
+            if ($newDetails['tags']) {
+                $tag_array = array();
+                foreach ($newDetails['tags'] as $tag) {
+                    // $item = Tag::where('name', $tag)->first();
+                    $item = $this->tagService->getTagByName($tag)->first();
+                    if (!$item) {
+                        $newTag = $this->tagService->createTag([
+                            'name' => $tag,
+                        ]);
+                        array_push($tag_array, $newTag->id);
+                    } else {
+                        array_push($tag_array, $item->id);
+                    }
+                }
+
+                $updatedPost->tags()->sync($tag_array);
+            }
             DB::commit();
+            return $updatedPost;
         } catch (\Exception $e) {
             DB::rollBack();
+            // dd($e);
         }
     }
     public function createPost(array $newDetails)
     {
         DB::beginTransaction();
         try {
-            $this->postRepository->createPost($newDetails);
+            $createdPost = $this->postRepository->createPost($newDetails);
+            if ($newDetails['tags']) {
+                $tag_array = array();
+                foreach ($newDetails['tags'] as $tag) {
+                    $item = $this->tagService->getTagByName($tag)->first();
+                    if (!$item) {
+                        $newTag = $this->tagService->createTag([
+                            'name' => $tag,
+                        ]);
+                        array_push($tag_array, $newTag->id);
+                    } else {
+                        array_push($tag_array, $item->id);
+                    }
+                }
+                $createdPost->tags()->sync($tag_array);
+            }
+            // test();
             DB::commit();
-        } catch (\Exception $e) {
+            return $createdPost;
+        } catch (Error $e) {
             DB::rollBack();
+            dd($e);
         }
     }
 

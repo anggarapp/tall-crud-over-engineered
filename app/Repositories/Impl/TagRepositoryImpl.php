@@ -15,16 +15,20 @@ class TagRepositoryImpl implements TagRepository
     {
         return Tag::find($tagId);
     }
+    public function getTagByName($tagName)
+    {
+        return Tag::where('name', $tagName);
+    }
     public function deleteTag($tagId)
     {
         Tag::find($tagId)->delete();
     }
     public function updateTag($tagId, array $newDetails)
     {
-        Tag::find($tagId)->update($newDetails);
+        return tap(Tag::find($tagId))->update($newDetails);
     }
     public function createTag(array $newDetails)
     {
-        Tag::create($newDetails);
+        return Tag::create($newDetails);
     }
 }

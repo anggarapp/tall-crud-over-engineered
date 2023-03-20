@@ -21,10 +21,10 @@ class ImageRepositoryImpl implements ImageRepository
     }
     public function updateImage($imageId, array $newDetails)
     {
-        Image::find($imageId)->update($newDetails);
+        return tap(Image::find($imageId))->update($newDetails);
     }
     public function createImage(array $newDetails)
     {
-        Image::create($newDetails);
+        return Image::create($newDetails);
     }
 }

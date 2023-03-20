@@ -15,6 +15,7 @@ class PostTable extends Component
     public $sortColumn = 'created_at';
     public $sortDirection = 'asc';
     public $searchTerm;
+    protected $listeners = ['refreshPostParent' => '$refresh'];
 
     public function render()
     {
@@ -29,15 +30,6 @@ class PostTable extends Component
         $postService = App::make(PostService::class);
         try {
             $posts = $postService->findPostWithSort($this->sortColumn, $this->sortDirection, $this->searchTerm)->paginate(5);
-            // $posts = Post::select('id', 'title', 'content', 'created_at')
-            //     ->where(function ($query) {
-            //         if ($this->searchTerm) {
-            //             $query->where('title', 'like', '%' . $this->searchTerm . '%');
-            //             $query->orWhere('content', 'like', '%' . $this->searchTerm . '%');
-            //         }
-            //     })
-            //     ->orderBy($this->sortColumn, $this->sortDirection)->paginate(5);
-            // dd($posts);
             return $posts;
         } catch (\Throwable $th) {
             return [];

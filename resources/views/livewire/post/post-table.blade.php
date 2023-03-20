@@ -1,6 +1,8 @@
 <div>
     {{-- @if ($posts) --}}
     @livewire('post.post-create-modal')
+    @livewire('post.post-delete-modal')
+    @livewire('post.post-update-modal')
     <div class="block rounded-lg shadow-lg bg-white min-w-full">
         <div class="mt-8 overflow-hidden shadow sm:rounded-lg">
             <div class="flex flex-col">
@@ -43,18 +45,18 @@
                                         @endforeach
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap block">
                                             <div class="inline-flex">
-                                                <button wire:click="select({{ $post->id }},'update')" x-data="{}"
-                                                    x-on:click="window.livewire.emitTo('post-form', 'show')"
+                                                <button x-data="{}"
+                                                    x-on:click="window.livewire.emitTo('post.post-update-modal', 'showUpdate', '{{ $post->id }}')"
                                                     class="flex items-center justify-center mx-1 px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-blue-500 rounded-md dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:bg-blue-700 hover:bg-blue-600 focus:outline-none focus:bg-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                                                     Update
                                                 </button>
-                                                <button wire:click="select({{ $post->id }},'delete')" x-data="{}"
-                                                    x-on:click="window.livewire.emitTo('post-delete-modal', 'show')"
+                                                <button x-data="{}"
+                                                    x-on:click="window.livewire.emitTo('post.post-delete-modal', 'showDelete', '{{ $post->id }}')"
                                                     class="flex items-center justify-center mx-1 px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-red-500 rounded-md dark:bg-red-600 dark:hover:bg-red-700 dark:focus:bg-red-700 hover:bg-red-600 focus:outline-none focus:bg-red-500 focus:ring focus:ring-red-300 focus:ring-opacity-50">
                                                     Delete
                                                 </button>
-                                                <button wire:click="select({{ $post->id }},'image')" x-data="{}"
-                                                    x-on:click="window.livewire.emitTo('post-additional-image', 'show')"
+                                                <button x-data="{}"
+                                                    x-on:click="window.livewire.emitTo('post.post-additional-image', 'show')"
                                                     class="flex items-center justify-center mx-1 px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-cyan-500 rounded-md dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:bg-cyan-700 hover:bg-cyan-600 focus:outline-none focus:bg-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50">
                                                     Image
                                                 </button>
