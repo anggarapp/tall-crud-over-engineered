@@ -52,7 +52,7 @@ class PostTest extends TestCase
         $this->postService->createPost([
             'title' => 'Post By Id',
             'content' => 'Post By Id Test Case',
-            'tags' => [],
+            // 'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -72,7 +72,7 @@ class PostTest extends TestCase
         $this->postService->createPost([
             'title' => 'Post Create',
             'content' => 'Post Create Test Case',
-            'tags' => [],
+            // 'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -86,7 +86,7 @@ class PostTest extends TestCase
         $this->postService->createPost([
             'title' => 'Post Create',
             'content' => 'Post Update Test Case',
-            'tags' => [],
+            // 'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -99,7 +99,7 @@ class PostTest extends TestCase
         $this->postService->updatePost($postId, [
             'title' => 'Post Update',
             'content' => 'Post Updated Test Case',
-            'tags' => [],
+            // 'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -118,7 +118,6 @@ class PostTest extends TestCase
         $this->postService->createPost([
             'title' => 'Post Create',
             'content' => 'Post Delete Test Case',
-            'tags' => [],
         ]);
 
         $this->assertDatabaseHas('posts', [
@@ -145,4 +144,26 @@ class PostTest extends TestCase
         assertNotNull($posts);
         assertEquals('10', $posts->id);
     }
+
+    public function testCreatePostWithTags()
+    {
+        $this->postService->createPost([
+            'title' => 'Post Create',
+            'content' => 'Post Delete Test Case',
+            'tags' => ['test', 'toast']
+        ]);
+
+        $this->assertDatabaseHas('posts', [
+            'title' => 'Post Create',
+            'content' => 'Post Delete Test Case'
+        ]);
+        $this->assertDatabaseHas('tags', [
+            'name' => 'test',
+        ]);
+        $this->assertDatabaseHas('tags', [
+            'name' => 'toast',
+        ]);
+    }
+
+    
 }

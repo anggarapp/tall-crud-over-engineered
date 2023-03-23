@@ -42,8 +42,9 @@ class TagServiceImpl implements TagService
     {
         DB::beginTransaction();
         try {
-            $this->tagRepository->updateTag($tagId, $newDetails);
+            $updatedTag = $this->tagRepository->updateTag($tagId, $newDetails);
             DB::commit();
+            return $updatedTag;
         } catch (\Exception $e) {
             DB::rollBack();
         }
@@ -58,5 +59,10 @@ class TagServiceImpl implements TagService
         } catch (\Exception $e) {
             DB::rollBack();
         }
+    }
+
+    public function findTagWithSort($sortColumn, $sortDirection = 'asc', $searchTerm = null)
+    {
+        return $this->tagRepository->findTagWithSort($sortColumn, $sortDirection, $searchTerm);
     }
 }

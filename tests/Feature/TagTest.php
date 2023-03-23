@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Tag;
+use App\Services\PostService;
 use App\Services\TagService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
@@ -17,10 +18,12 @@ class TagTest extends TestCase
 
     protected $seed = true;
     private TagService $tagService;
+    private PostService $postService;
     protected function setUp(): void
     {
         parent::setUp();
         $this->tagService = $this->app->make(TagService::class);
+        $this->postService = $this->app->make(PostService::class);
     }
     /**
      * A basic feature test example.
@@ -33,7 +36,7 @@ class TagTest extends TestCase
     public function testSeederCreated(): void
     {
         $this->assertDatabaseHas('tags', ['id' => '1']);
-        $this->assertDatabaseCount('tags', 3);
+        $this->assertDatabaseCount('tags', 30);
     }
 
     public function testGetAllTag(): void
@@ -115,6 +118,37 @@ class TagTest extends TestCase
 
         $this->assertDatabaseMissing('tags', [
             'name' => 'Tag Create'
+        ]);
+    }
+
+    public function testDeleteTagPostCascade(): void
+    {
+        $this->postService->createPost([
+            'title' => 'Post Create',
+            'content' => 'Post Delete Test Case',
+            'tags' => ['test', 'toast']
+        ]);
+
+        $this->assertDatabaseHas('posts', [
+            'title' => 'Post Create',
+            'content' => 'Post Delete Test Case'
+        ]);
+        $this->assertDatabaseHas('tags', [
+            'name' => 'test',
+        ]);
+        $this->assertDatabaseHas('tags', [
+            'name' => 'toast',
+        ]);
+
+        $tagId = Tag::where('name', 'test')->first()->id;
+
+        $this->tagService->deleteTag($tagId);
+
+        $this->assertDatabaseMissing('tags', [
+            'name' => 'test'
+        ]);
+        $this->assertDatabaseMissing('taggables', [
+            'tag_id' => $tagId,
         ]);
     }
 }

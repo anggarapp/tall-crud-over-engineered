@@ -13,9 +13,11 @@ class PostCreateModal extends ModalBase
     public $title;
     public $content;
     public $tags = [];
+    public $images;
     public $rules = [
         'title' => 'required|min:3',
         'content' => 'required',
+        'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg',
     ];
 
     public function render()
@@ -27,6 +29,7 @@ class PostCreateModal extends ModalBase
     {
         $this->title = null;
         $this->content = null;
+        $this->images = null;
         $this->tags = [];
         $this->resetValidation();
         $this->resetErrorBag();

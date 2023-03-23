@@ -49,7 +49,7 @@ class PostServiceImpl implements PostService
                 'title' => $newDetails['title'],
                 'content' => $newDetails['content']
             ]);
-            if ($newDetails['tags']) {
+            if (isset($newDetails['tags'])) {
                 $tag_array = array();
                 foreach ($newDetails['tags'] as $tag) {
                     // $item = Tag::where('name', $tag)->first();
@@ -78,7 +78,7 @@ class PostServiceImpl implements PostService
         DB::beginTransaction();
         try {
             $createdPost = $this->postRepository->createPost($newDetails);
-            if ($newDetails['tags']) {
+            if (isset($newDetails['tags'])) {
                 $tag_array = array();
                 foreach ($newDetails['tags'] as $tag) {
                     $item = $this->tagService->getTagByName($tag)->first();

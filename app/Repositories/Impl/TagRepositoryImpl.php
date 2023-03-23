@@ -31,4 +31,14 @@ class TagRepositoryImpl implements TagRepository
     {
         return Tag::create($newDetails);
     }
+    public function findTagWithSort($sortColumn, $sortDirection = 'asc', $searchTerm = null)
+    {
+        return Tag::select('id', 'name', 'created_at')
+            ->where(function ($query) use ($searchTerm) {
+                if ($searchTerm) {
+                    $query->where('name', 'like', '%' . $searchTerm . '%');
+                }
+            })
+            ->orderBy($sortColumn, $sortDirection);
+    }
 }

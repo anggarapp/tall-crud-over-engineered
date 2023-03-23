@@ -12,9 +12,11 @@ class PostUpdateModal extends ModalBase
     public $title;
     public $content;
     public $tags = [];
+    public $images;
     public $rules = [
         'title' => 'required|min:3',
         'content' => 'required',
+        'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg',
     ];
 
 
@@ -36,6 +38,7 @@ class PostUpdateModal extends ModalBase
         $this->content = null;
         $this->selectedPostId = null;
         $this->tags = [];
+        $this->images = null;
         $this->resetValidation();
         $this->resetErrorBag();
     }

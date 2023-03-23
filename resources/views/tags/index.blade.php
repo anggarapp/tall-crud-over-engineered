@@ -13,6 +13,7 @@ Tags
         <div class="mt-2 text-gray-600 dark:text-gray-400 text-xl">
             Hello Kiddos!, Welcome to Tags Page
         </div>
+        @livewire('tag.tag-table')
     </div>
 </div>
 @endsection
