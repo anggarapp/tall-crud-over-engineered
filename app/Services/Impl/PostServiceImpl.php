@@ -33,8 +33,10 @@ class PostServiceImpl implements PostService
     }
     public function deletePost($postId)
     {
+        $post = $this->getPostById($postId);
         DB::beginTransaction();
         try {
+            $post->tags()->sync([]);
             $this->postRepository->deletePost($postId);
             DB::commit();
         } catch (\Exception $e) {

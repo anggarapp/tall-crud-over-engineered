@@ -18,7 +18,7 @@ class ImageFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'url' => 'testdoang.com/image.png',
+            'url' => 'demo.png',
         ];
     }
 }

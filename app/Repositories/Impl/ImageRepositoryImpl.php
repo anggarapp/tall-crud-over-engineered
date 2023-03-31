@@ -27,4 +27,15 @@ class ImageRepositoryImpl implements ImageRepository
     {
         return Image::create($newDetails);
     }
+    public function findImageWithSort($sortColumn, $sortDirection = 'asc', $searchTerm = null)
+    {
+        return Image::select('id', 'name', 'url', 'created_at')
+            ->where(function ($query) use ($searchTerm) {
+                if ($searchTerm) {
+                    $query->where('name', 'like', '%' . $searchTerm . '%');
+                    $query->orWhere('url', 'like', '%' . $searchTerm . '%');
+                }
+            })
+            ->orderBy($sortColumn, $sortDirection);
+    }
 }

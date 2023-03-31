@@ -13,6 +13,7 @@ Images
         <div class="mt-2 text-gray-600 dark:text-gray-400 text-xl">
             Hello Kiddos!, Welcome to Images Page
         </div>
+        @livewire('image.image-table')
     </div>
 </div>
 @endsection

@@ -17,7 +17,6 @@ class PostCreateModal extends ModalBase
     public $rules = [
         'title' => 'required|min:3',
         'content' => 'required',
-        'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg',
     ];
 
     public function render()
@@ -44,6 +43,12 @@ class PostCreateModal extends ModalBase
 
     public function store()
     {
+        if (!empty($this->images)) {
+            $this->rules = array_merge($this->rules, [
+                'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg'
+            ]);
+        }
+
         $this->validate();
 
         $postService = App::make(PostService::class);
