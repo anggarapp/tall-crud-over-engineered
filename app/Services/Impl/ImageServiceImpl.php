@@ -45,7 +45,6 @@ class ImageServiceImpl implements ImageService
     public function updateImage($imageId, array $newDetails)
     {
         $imageHashName = null;
-        //need to ad case if image changed, old image deleted on storage
         DB::beginTransaction();
         try {
             $deletedImageName = null;

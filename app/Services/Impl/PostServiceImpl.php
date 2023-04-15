@@ -97,7 +97,7 @@ class PostServiceImpl implements PostService
                 $createdPost->tags()->sync($tag_id_array);
             }
 
-            if ($newDetails['images']) {
+            if (isset($newDetails['images'])) {
                 $image_id_array = array();
                 foreach ($newDetails['images'] as $image) {
                     $createdImage = $this->imageService->createImage([

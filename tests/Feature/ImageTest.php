@@ -7,6 +7,8 @@ use App\Services\ImageService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\CreatesApplication;
 use Tests\TestCase;
 
@@ -43,15 +45,16 @@ class ImageTest extends TestCase
 
     public function testGetImageById(): void
     {
+        Storage::fake('avatars');
+        $file = UploadedFile::fake()->image('avatar.jpg');
 
         $this->imageService->createImage([
             'name' => 'Image By Id',
-            'url' => 'Image By Id Test Case'
+            'image' => $file,
         ]);
 
         $this->assertDatabaseHas('images', [
-            'name' => 'Image By Id',
-            'url' => 'Image By Id Test Case'
+            'name' => 'Image By Id'
         ]);
 
         $image = Image::where('name', 'Image By Id')->first();
@@ -63,57 +66,31 @@ class ImageTest extends TestCase
 
     public function testCreateImage(): void
     {
+        Storage::fake('avatars');
+        $file = UploadedFile::fake()->image('avatar.jpg');
         $this->imageService->createImage([
             'name' => 'Image Create',
-            'url' => 'Image Create Test Case'
+            'image' => $file,
         ]);
 
         $this->assertDatabaseHas('images', [
             'name' => 'Image Create',
-            'url' => 'Image Create Test Case'
         ]);
     }
 
-    public function testUpdateImage(): void
-    {
-        $this->imageService->createImage([
-            'name' => 'Image Create',
-            'url' => 'Image Update Test Case'
-        ]);
 
-        $this->assertDatabaseHas('images', [
-            'name' => 'Image Create',
-            'url' => 'Image Update Test Case'
-        ]);
-
-        $imageId = Image::where('name', 'Image Create')->first()->id;
-
-        $this->imageService->updateImage($imageId, [
-            'name' => 'Image Update',
-            'url' => 'Image Updated Test Case'
-        ]);
-
-        $this->assertDatabaseHas('images', [
-            'name' => 'Image Update',
-            'url' => 'Image Updated Test Case'
-        ]);
-
-        $this->assertDatabaseMissing('images', [
-            'name' => 'Image Create',
-            'url' => 'Image Update Test Case'
-        ]);
-    }
 
     public function testDeleteImage(): void
     {
+        Storage::fake('avatars');
+        $file = UploadedFile::fake()->image('avatar.jpg');
         $this->imageService->createImage([
             'name' => 'Image Create',
-            'url' => 'Image Delete Test Case'
+            'image' => $file,
         ]);
 
         $this->assertDatabaseHas('images', [
             'name' => 'Image Create',
-            'url' => 'Image Delete Test Case'
         ]);
 
         $imageId = Image::where('name', 'Image Create')->first()->id;
@@ -122,7 +99,38 @@ class ImageTest extends TestCase
 
         $this->assertDatabaseMissing('images', [
             'name' => 'Image Create',
-            'url' => 'Image Delete Test Case'
+        ]);
+    }
+
+    public function testUpdateImage(): void
+    {
+        Storage::fake('avatars');
+        $file = UploadedFile::fake()->image('avatar.jpg');
+        $fileUpdate = UploadedFile::fake()->image('update.jpg');
+        $this->imageService->createImage([
+            'name' => 'Image Create',
+            'image' => $file,
+        ]);
+
+        $this->assertDatabaseHas('images', [
+            'name' => 'Image Create',
+        ]);
+
+        $imageId = Image::where('name', 'Image Create')->first()->id;
+        $imageUrl = Image::where('name', 'Image Create')->first()->url;
+
+        $this->imageService->updateImage($imageId, [
+            'name' => 'Image Update',
+            'image' => $fileUpdate,
+            'oldImage' => $imageUrl,
+        ]);
+
+        $this->assertDatabaseHas('images', [
+            'name' => 'Image Update',
+        ]);
+
+        $this->assertDatabaseMissing('images', [
+            'name' => 'Image Create',
         ]);
     }
 }
