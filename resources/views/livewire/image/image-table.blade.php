@@ -3,6 +3,7 @@
     @livewire('image.image-create-modal')
     @livewire('image.image-delete-modal')
     @livewire('image.image-update-modal')
+    @livewire('image.image-show-posts-modal')
     <div class="block rounded-lg shadow-lg bg-white min-w-full">
         <div class="mt-8 overflow-hidden shadow sm:rounded-lg">
             <div class="flex flex-col">
@@ -56,7 +57,7 @@
                                                     Delete
                                                 </button>
                                                 <button x-data="{}"
-                                                    x-on:click="window.livewire.emitTo('image.image-additional-image', 'show')"
+                                                    x-on:click="window.livewire.emitTo('image.image-show-posts-modal', 'showPosts', '{{ $image->id }}')"
                                                     class="flex items-center justify-center mx-1 px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-500 rounded-md dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:bg-gray-700 hover:bg-gray-600 focus:outline-none focus:bg-gray-500 focus:ring focus:ring-gray-300 focus:ring-opacity-50">
                                                     Posts
                                                 </button>

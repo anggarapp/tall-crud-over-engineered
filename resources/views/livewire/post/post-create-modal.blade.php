@@ -42,7 +42,7 @@ focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wir
     </div>
     @endif
     <label for="images">Images</label>
-    <input type="file" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4
+    <input multiple id="{{ $clearId }}" type="file" class=" form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out mb-4
 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" wire:model="images">
     @if ($errors->has('images'))
     <div class="bg-red-100 rounded-sm py-2 px-2 mb-1 text-base text-red-700 inline-flex items-center w-full"

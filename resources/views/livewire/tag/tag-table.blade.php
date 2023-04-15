@@ -4,6 +4,8 @@
         @livewire('tag.tag-create-modal')
         @livewire('tag.tag-delete-modal')
         @livewire('tag.tag-update-modal')
+        @livewire('tag.tag-show-posts-modal')
+        @livewire('tag.tag-show-images-modal')
         <div class="block rounded-lg shadow-lg bg-white min-w-full">
             <div class="mt-8 overflow-hidden shadow sm:rounded-lg">
                 <div class="flex flex-col">
@@ -59,12 +61,12 @@
                                                         Delete
                                                     </button>
                                                     <button x-data="{}"
-                                                        x-on:click="window.livewire.emitTo('tag.tag-posts', 'show')"
+                                                        x-on:click="window.livewire.emitTo('tag.tag-show-posts-modal', 'showPosts', '{{ $tag->id }}')"
                                                         class="flex items-center justify-center mx-1 px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-purple-500 rounded-md dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:bg-purple-700 hover:bg-purple-600 focus:outline-none focus:bg-purple-500 focus:ring focus:ring-purple-300 focus:ring-opacity-50">
                                                         Posts
                                                     </button>
                                                     <button x-data="{}"
-                                                        x-on:click="window.livewire.emitTo('tag.tag-images', 'show')"
+                                                        x-on:click="window.livewire.emitTo('tag.tag-show-images-modal', 'showImages', '{{ $tag->id }}')"
                                                         class="flex items-center justify-center mx-1 px-3 py-2 space-x-2 text-sm tracking-wide text-white capitalize transition-colors duration-200 transform bg-cyan-500 rounded-md dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:bg-cyan-700 hover:bg-cyan-600 focus:outline-none focus:bg-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50">
                                                         Images
                                                     </button>

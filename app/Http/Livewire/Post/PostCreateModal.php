@@ -7,13 +7,17 @@ use App\Models\Tag;
 use App\Services\PostService;
 use Illuminate\Support\Facades\App;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class PostCreateModal extends ModalBase
 {
+    use WithFileUploads;
+
     public $title;
     public $content;
     public $tags = [];
     public $images;
+    public $clearId;
     public $rules = [
         'title' => 'required|min:3',
         'content' => 'required',
@@ -26,10 +30,8 @@ class PostCreateModal extends ModalBase
 
     public function clearVariable()
     {
-        $this->title = null;
-        $this->content = null;
-        $this->images = null;
-        $this->tags = [];
+        $this->resetExcept('clearId');
+        $this->clearId++;
         $this->resetValidation();
         $this->resetErrorBag();
     }
@@ -56,6 +58,7 @@ class PostCreateModal extends ModalBase
             'title' => $this->title,
             'content' => $this->content,
             'tags' => $this->tags,
+            'images' => $this->images,
         ]);
         if ($created_post) {
             $this->unshow();

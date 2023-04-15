@@ -52,7 +52,7 @@ class PostServiceImpl implements PostService
                 'content' => $newDetails['content']
             ]);
             if (isset($newDetails['tags'])) {
-                $tag_array = array();
+                $tag_id_array = array();
                 foreach ($newDetails['tags'] as $tag) {
                     // $item = Tag::where('name', $tag)->first();
                     $item = $this->tagService->getTagByName($tag)->first();
@@ -60,13 +60,13 @@ class PostServiceImpl implements PostService
                         $newTag = $this->tagService->createTag([
                             'name' => $tag,
                         ]);
-                        array_push($tag_array, $newTag->id);
+                        array_push($tag_id_array, $newTag->id);
                     } else {
-                        array_push($tag_array, $item->id);
+                        array_push($tag_id_array, $item->id);
                     }
                 }
 
-                $updatedPost->tags()->sync($tag_array);
+                $updatedPost->tags()->sync($tag_id_array);
             }
             DB::commit();
             return $updatedPost;
@@ -80,20 +80,34 @@ class PostServiceImpl implements PostService
         DB::beginTransaction();
         try {
             $createdPost = $this->postRepository->createPost($newDetails);
+
             if (isset($newDetails['tags'])) {
-                $tag_array = array();
+                $tag_id_array = array();
                 foreach ($newDetails['tags'] as $tag) {
                     $item = $this->tagService->getTagByName($tag)->first();
                     if (!$item) {
                         $newTag = $this->tagService->createTag([
                             'name' => $tag,
                         ]);
-                        array_push($tag_array, $newTag->id);
+                        array_push($tag_id_array, $newTag->id);
                     } else {
-                        array_push($tag_array, $item->id);
+                        array_push($tag_id_array, $item->id);
                     }
                 }
-                $createdPost->tags()->sync($tag_array);
+                $createdPost->tags()->sync($tag_id_array);
+            }
+
+            if ($newDetails['images']) {
+                $image_id_array = array();
+                foreach ($newDetails['images'] as $image) {
+                    $createdImage = $this->imageService->createImage([
+                        'name' => str_replace('.' . $image->extension(), "", $image->getClientOriginalName()),
+                        'image' => $image,
+                        'tags' => $newDetails['tags'] ?? [],
+                    ]);
+                    array_push($image_id_array, $createdImage->id);
+                }
+                $createdPost->images()->sync($image_id_array);
             }
             // test();
             DB::commit();
@@ -101,6 +115,30 @@ class PostServiceImpl implements PostService
         } catch (Error $e) {
             DB::rollBack();
             dd($e);
+        }
+    }
+
+    public function updatePostNewImages($postId, $newImages)
+    {
+        DB::beginTransaction();
+        try {
+            $post = $this->getPostById($postId);
+            $postTags = $post->tags()->select('name')->get()->pluck('name')->toArray();
+            // dd($postTags);
+            $image_id_array = array();
+            foreach ($newImages as $image) {
+                $createdImage = $this->imageService->createImage([
+                    'name' => str_replace('.' . $image->extension(), "", $image->getClientOriginalName()),
+                    'image' => $image,
+                    'tags' => $postTags ?? [],
+                ]);
+                array_push($image_id_array, $createdImage->id);
+            }
+            $post->images()->attach($image_id_array);
+            DB::commit();
+            return true;
+        } catch (Error $e) {
+            return false;
         }
     }
 
